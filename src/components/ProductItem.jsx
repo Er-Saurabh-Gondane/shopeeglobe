@@ -1,12 +1,20 @@
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/cartSlice";
 
 export default function ProductItem({ product }) {
+
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    dispatch(addToCart(product));
+  };
+
   return (
     <div className="bg-white rounded-2xl p-4 shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
 
-      {/* send product object in state */}
+      {/* open details page */}
       <Link to={`/product/${product.id}`} state={{ product }}>
-
         <img
           src={product.thumbnail}
           alt={product.title}
@@ -21,7 +29,6 @@ export default function ProductItem({ product }) {
         <p className="text-slate-500 text-sm line-clamp-2">
           {product.description}
         </p>
-
       </Link>
 
       <div className="flex justify-between items-center mt-4">
@@ -34,7 +41,11 @@ export default function ProductItem({ product }) {
         </span>
       </div>
 
-      <button className="mt-5 w-full py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg">
+      {/* ADD TO CART */}
+      <button
+        onClick={handleAddToCart}
+        className="mt-5 w-full py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg"
+      >
         Add to Cart
       </button>
 

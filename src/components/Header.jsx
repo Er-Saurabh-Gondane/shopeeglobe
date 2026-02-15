@@ -1,10 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 function Header() {
+
+  // get cart items from redux
+  const items = useSelector(state => state.cart.items)
+
+  // calculate total quantity
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
+
   return (
     <header>
-      
+
       <div className='max-w-7xl mx-auto flex items-center justify-between py-4 px-4'>
 
         {/* Logo */}
@@ -22,8 +30,6 @@ function Header() {
           >
             <i className="fa-solid fa-house transition-transform duration-300 group-hover:-translate-y-1"></i>
             <span>Home</span>
-
-            {/* underline animation */}
             <span className='absolute left-0 -bottom-1 h-0.5 w-0 bg-indigo-700 transition-all duration-300 group-hover:w-full'></span>
           </Link>
 
@@ -32,10 +38,18 @@ function Header() {
             to="/cart"
             className='group relative flex items-center gap-2 px-2 py-1 transition-all duration-300 hover:text-indigo-700'
           >
-            <i className="fa-solid fa-cart-arrow-down transition-transform duration-300 group-hover:scale-110"></i>
-            <span>Cart</span>
+            <div className="relative">
+              <i className="fa-solid fa-cart-arrow-down transition-transform duration-300 group-hover:scale-110"></i>
 
-            {/* underline animation */}
+              {/* CART COUNT BADGE */}
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                  {totalItems}
+                </span>
+              )}
+            </div>
+
+            <span>Cart</span>
             <span className='absolute left-0 -bottom-1 h-0.5 w-0 bg-indigo-700 transition-all duration-300 group-hover:w-full'></span>
           </Link>
 

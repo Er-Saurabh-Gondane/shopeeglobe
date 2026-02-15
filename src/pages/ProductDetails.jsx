@@ -1,49 +1,103 @@
 import { useLocation } from "react-router-dom";
 
 export default function ProductDetails() {
-  const location = useLocation();
-  const product = location.state?.product;
+  const { state } = useLocation();
+  const product = state?.product;
 
   if (!product) {
-    return <h1 className="text-center mt-20 text-2xl">No product data found</h1>;
+    return (
+      <h1 className="text-center mt-20 text-2xl font-semibold">
+        Product not found
+      </h1>
+    );
   }
 
-  return (
-    <div className="max-w-6xl mx-auto px-6 py-12 grid md:grid-cols-2 gap-12">
+  const discountedPrice = (
+    product.price -
+    (product.price * product.discountPercentage) / 100
+  ).toFixed(2);
 
-      {/* Image */}
-      <div className="bg-white rounded-3xl shadow-xl p-8">
-        <img
-          src={product.thumbnail}
-          alt={product.title}
-          className="w-full h-[420px] object-contain"
-        />
+  return (
+    <div className="max-w-7xl mx-auto px-6 py-12 grid lg:grid-cols-2 gap-16">
+
+      {/* LEFT - IMAGES */}
+      <div className="space-y-6">
+        <div className="bg-white rounded-3xl shadow-xl p-10">
+          <img
+            src={product.thumbnail}
+            alt={product.title}
+            className="w-full h-105 object-contain"
+          />
+        </div>
+
+        {/* thumbnails */}
+        <div className="flex gap-4 overflow-x-auto">
+          {product.images?.map((img, i) => (
+            <img
+              key={i}
+              src={img}
+              className="h-24 w-24 object-cover rounded-xl border hover:scale-105 transition cursor-pointer"
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Info */}
+      {/* RIGHT - DETAILS */}
       <div className="flex flex-col justify-center">
-        <h1 className="text-4xl font-bold mb-4">{product.title}</h1>
 
-        <p className="text-gray-600 text-lg mb-6">
-          {product.description}
+        {/* title */}
+        <h1 className="text-4xl font-bold mb-3 text-slate-800">
+          {product.title}
+        </h1>
+
+        {/* brand & category */}
+        <p className="text-indigo-600 font-medium mb-2">
+          {product.brand} • {product.category}
         </p>
 
-        <div className="flex items-center gap-6 mb-6">
-          <span className="text-3xl font-bold text-indigo-700">
+        {/* rating */}
+        <div className="flex items-center gap-2 mb-6">
+          <span className="text-yellow-500 text-xl">
+            {"⭐".repeat(Math.round(product.rating))}
+          </span>
+          <span className="text-gray-500">({product.rating})</span>
+        </div>
+
+        {/* price */}
+        <div className="mb-6">
+          <span className="text-4xl font-bold text-indigo-700 mr-4">
+            ${discountedPrice}
+          </span>
+          <span className="line-through text-gray-400 text-xl">
             ${product.price}
           </span>
-
-          <span className="text-yellow-500 text-lg font-semibold">
-            ⭐ {product.rating}
+          <span className="ml-3 text-green-600 font-semibold">
+            {product.discountPercentage}% OFF
           </span>
         </div>
 
-        <button className="w-56 py-4 rounded-xl bg-black text-white text-lg font-semibold hover:scale-105 transition">
-          Add To Cart
-        </button>
-      </div>
+        {/* stock */}
+        <p className={`mb-6 font-medium ${product.stock > 0 ? "text-green-600" : "text-red-500"}`}>
+          {product.stock > 0 ? `In Stock (${product.stock})` : "Out of Stock"}
+        </p>
 
+        {/* description */}
+        <p className="text-gray-600 leading-relaxed mb-8">
+          {product.description}
+        </p>
+
+        {/* buttons */}
+        <div className="flex gap-4">
+          <button className="px-8 py-4 bg-indigo-600 text-white rounded-xl text-lg font-semibold hover:bg-indigo-700 hover:scale-105 transition">
+            Add To Cart
+          </button>
+
+          <button className="px-8 py-4 border border-slate-300 rounded-xl text-lg font-semibold hover:bg-slate-100 transition">
+            Buy Now
+          </button>
+        </div>
+
+      </div>
     </div>
   );
 }
-
