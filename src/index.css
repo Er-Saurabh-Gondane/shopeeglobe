@@ -1,0 +1,16 @@
+@import "tailwindcss";
+/* Tailwind v4 theme customization */
+
+@theme {
+  --font-sans: "Poppins", sans-serif;
+}
+
+/* Apply globally */
+body {
+  font-family: var(--font-sans);
+}
+@layer utilities {
+  .text-gradient {
+    @apply bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent;
+  }
+}
