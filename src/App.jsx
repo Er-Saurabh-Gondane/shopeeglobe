@@ -1,12 +1,14 @@
-import React from 'react'
-import Home from './pages/Home.jsx'
+import { Outlet } from "react-router-dom";
+import Header from "./components/Header";
 
 function App() {
   return (
-  <div>
-    <Home />
-  </div>
-  )
+    <div>
+
+    
+      <Outlet />
+    </div>
+  );
 }
 
-export default App
+export default App;
