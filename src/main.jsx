@@ -11,7 +11,7 @@ const App = lazy(() => import("./App.jsx"));
 const Home = lazy(() => import("./pages/Home.jsx"));
 const ProductDetails = lazy(() => import("./pages/ProductDetails.jsx"));
 const Cart = lazy(() => import("./pages/Cart.jsx"));
-const Checkout = lazy(() => import("./pages/Checkout.jsx"));
+const Checkout = lazy(() => import("./pages/Checkout"));
 
 /* Loading UI */
 const Loader = () => (
