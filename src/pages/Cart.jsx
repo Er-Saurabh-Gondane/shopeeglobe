@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 function Cart() {
+  const navigate = useNavigate();
   const { items } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
@@ -28,7 +29,7 @@ function Cart() {
       </div>
     );
   }
- const navigate = useNavigate();
+
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
