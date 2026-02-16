@@ -30,9 +30,9 @@ https://shopeeglobe.vercel.app/
 * **Automated Workflow:** Placing an order clears the Redux cart state and redirects the user to the Home page after a success message.
 
 ## 🛠️ Tech Stack
-* **Frontend:** React 18 (Vite)
+* **Frontend:** React (Vite)
 * **State Management:** Redux Toolkit & React-Redux
-* **Routing:** React Router DOM v6
+* **Routing:** React Router DOM 
 * **Styling:** Tailwind CSS 
 * **API:** DummyJSON
 
