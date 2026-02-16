@@ -1,21 +1,63 @@
-import { useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/cartSlice";
+import { useEffect, useState } from "react";
 
-export default function ProductDetails() {
+function ProductDetails() {
+  const { id } = useParams();
   const { state } = useLocation();
-  const product = state?.product;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  if (!product) {
+  // product comes from navigation OR fetch fallback
+  const [product, setProduct] = useState(state?.product || null);
+  const [loading, setLoading] = useState(!state?.product);
+
+  // Fetch product if page refreshed
+  useEffect(() => {
+    if (!product) {
+      setLoading(true);
+      fetch(`https://dummyjson.com/products/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setProduct(data);
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
+    }
+  }, [id, product]);
+
+  if (loading || !product) {
     return (
       <h1 className="text-center mt-20 text-2xl font-semibold">
-        Product not found
+        Loading product...
       </h1>
     );
   }
 
-  const discountedPrice = (
-    product.price -
-    (product.price * product.discountPercentage) / 100
-  ).toFixed(2);
+  // Correct discount calculation (NUMBER)
+  const discountedPrice = Number(
+    (product.price - (product.price * product.discountPercentage) / 100).toFixed(2)
+  );
+
+  // Add to cart
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        id: product.id,
+        title: product.title,
+        price: discountedPrice,
+        thumbnail: product.thumbnail,
+        stock: product.stock,
+      })
+    );
+  };
+
+  // Buy now (add + redirect)
+  const handleBuyNow = () => {
+    handleAddToCart();
+    navigate("/cart");
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 grid lg:grid-cols-2 gap-16">
@@ -36,6 +78,7 @@ export default function ProductDetails() {
             <img
               key={i}
               src={img}
+              alt="preview"
               className="h-24 w-24 object-cover rounded-xl border hover:scale-105 transition cursor-pointer"
             />
           ))}
@@ -88,11 +131,17 @@ export default function ProductDetails() {
 
         {/* buttons */}
         <div className="flex gap-4">
-          <button className="px-8 py-4 bg-indigo-600 text-white rounded-xl text-lg font-semibold hover:bg-indigo-700 hover:scale-105 transition">
+          <button
+            onClick={handleAddToCart}
+            className="px-8 py-4 bg-indigo-600 text-white rounded-xl text-lg font-semibold hover:bg-indigo-700 hover:scale-105 transition"
+          >
             Add To Cart
           </button>
 
-          <button className="px-8 py-4 border border-slate-300 rounded-xl text-lg font-semibold hover:bg-slate-100 transition">
+          <button
+            onClick={handleBuyNow}
+            className="px-8 py-4 border border-slate-300 rounded-xl text-lg font-semibold hover:bg-slate-100 transition"
+          >
             Buy Now
           </button>
         </div>
@@ -101,3 +150,5 @@ export default function ProductDetails() {
     </div>
   );
 }
+
+export default ProductDetails;
